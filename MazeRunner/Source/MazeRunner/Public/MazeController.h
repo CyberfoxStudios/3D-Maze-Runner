@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "MazeController.generated.h"
 
 UCLASS()
@@ -26,4 +27,5 @@ public:
     // Function to switch cameras
     void SwitchCameras();
     AActor* GetActiveCamera();
+    AActor* GetCameraByTag(FString ActorName);
 };

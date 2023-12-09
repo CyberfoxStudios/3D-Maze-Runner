@@ -44,12 +44,9 @@ void AMazeGenerator::NotifyHit(
 	//Generate Maze
 	if (!mazeGenerated)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Maze Not Generated"));
-
 		int nodesGenerated = 0;
 		while (nodesGenerated < mazeSize * mazeSize)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Generating Node"));
 
 			//calculate location
 			// Get the bounding box of the StaticMeshComponent

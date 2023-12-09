@@ -5,7 +5,6 @@
 
 AMazeController::AMazeController()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Maze Controller Constructor"));
 	// Set this player controller to tick every frame
 	PrimaryActorTick.bCanEverTick = true;
     PerspectiveCamera = nullptr;
@@ -16,30 +15,22 @@ void AMazeController::BeginPlay()
 {
     Super::BeginPlay();
 
-    UE_LOG(LogTemp, Warning, TEXT("Maze Controller BeginPlay"));
-
     //Sets the perspective camera to the default camera when the game starts
     PerspectiveCamera = GetActiveCamera();
 
+    if (!PerspectiveCamera)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("PerspectiveCamera not found!"));
+    }
+
     //Set the overhead camera
     // Specify the name of the actor you want to get
-    FString ActorName = "CameraOverhead";
-
-    // Use GetActorByName to find the actor by its name
-    OverheadCamera = FindObject<AActor>(ANY_PACKAGE, *ActorName);
-
-    if (!PerspectiveCamera || !OverheadCamera)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Cameras not found!"));
-    }
-    UE_LOG(LogTemp, Display, TEXT("Maze Controller Initialized"));
-    UE_LOG(LogTemp, Warning, TEXT("Maze Controller Initialized"));
+    OverheadCamera = GetCameraByTag("overhead");
 }
 
 //on tick, listen for c key
 void AMazeController::Tick(float DeltaTime)
 {
-    UE_LOG(LogTemp, Display, TEXT("Maze Controller Tick"));
     // Check if the "C" key was just pressed
     if (WasInputKeyJustPressed(EKeys::C))
     {
@@ -54,6 +45,9 @@ void AMazeController::Tick(float DeltaTime)
 // set alt camera to old camera
 void AMazeController::SwitchCameras()
 {
+    //Set the overhead camera
+    // Specify the name of the actor you want to get
+    OverheadCamera = GetCameraByTag("overhead");
 
     // Check if the current view target is the first camera, switch to the second camera, and vice versa
     if (GetActiveCamera() == PerspectiveCamera)
@@ -94,5 +88,25 @@ AActor* AMazeController::GetActiveCamera()
         UE_LOG(LogTemp, Warning, TEXT("PlayerController not found."));
         return nullptr;
     }
+}
+
+AActor* AMazeController::GetCameraByTag(FString TagName)
+{
+    // Get all actors in the level
+    TArray<AActor*> AllActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), AllActors);
+
+    // Iterate through all actors to find the one with the specified name and tag
+    for (AActor* OneActor : AllActors)
+    {
+        // Check if the actor has the correct name
+        if (OneActor->ActorHasTag(FName(*TagName)))
+        {
+            return OneActor;
+        }
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("Camera with tag %s not found!"), *TagName);
+    return nullptr;
 }
 
