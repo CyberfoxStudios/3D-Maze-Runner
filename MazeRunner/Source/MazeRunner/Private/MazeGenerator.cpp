@@ -41,8 +41,6 @@ void AMazeGenerator::NotifyHit(
 	const FHitResult& Hit
 )
 {
-	UE_LOG(LogTemp, Log, TEXT("Entering ReceiveHit"));
-
 	//Generate Maze
 	if (!mazeGenerated)
 	{
@@ -87,6 +85,5 @@ void AMazeGenerator::NotifyHit(
 		}
 		mazeGenerated = true;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("ReceiveHit Complete"));
 }
 
